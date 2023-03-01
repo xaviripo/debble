@@ -7,7 +7,7 @@ export const AttemptForm = ({ date, forceAttemptsListUpdate, disabled }) => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    const response = await fetch(`http://localhost:5000/attempts/${date}`, {
+    const response = await fetch(`attempts/${date}`, {
       method: "post",
       headers: {
         'Accept': 'application/json',

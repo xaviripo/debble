@@ -14,7 +14,7 @@ export const Puzzle = ({ date }) => {
 
   return <>
     <Media date={date}/>
-    <AttemptsList date={date} updater={updater} disabled={disabled} setDisabled={setDisabled}/>
+    <AttemptsList date={date} updater={updater} setDisabled={setDisabled}/>
     <AttemptForm date={date} forceAttemptsListUpdate={forceAttemptsListUpdate} disabled={disabled}/>
   </>
 };

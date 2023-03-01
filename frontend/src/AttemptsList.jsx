@@ -44,13 +44,13 @@ const fill = (attempts) => {
   return result;
 }
 
-export const AttemptsList = ({ date, updater, disabled, setDisabled }) => {
+export const AttemptsList = ({ date, updater, setDisabled }) => {
 
   let [attempts, setAttempts] = useState([]);
   let [solution, setSolution] = useState(null);
 
   useEffect(() => { (async () => {
-    const response = await fetch(`http://localhost:5000/attempts/${date}`);
+    const response = await fetch(`attempts/${date}`);
     const data = await response.json();
 
     setAttempts(fill(data));
@@ -62,7 +62,7 @@ export const AttemptsList = ({ date, updater, disabled, setDisabled }) => {
 
     // Player didn't get the solution correctly
     if (data.length >= MAX_ATTEMPTS && data.every(({ clue }) => clue !== "")) {
-      const response = await fetch(`http://localhost:5000/solution/${date}`);
+      const response = await fetch(`solution/${date}`);
       setSolution(await response.text());
     }
 
@@ -71,7 +71,7 @@ export const AttemptsList = ({ date, updater, disabled, setDisabled }) => {
   let solutionOutput = solution ? <span className="text-danger">Solution: {solution}</span> : '';
 
   return <>
-    <ol style="list-style-type: none">
+    <ol style={{listStyleType: 'none'}}>
       {attempts.map(({ attemptDate, clue }, attemptNumber) => <li key={attemptNumber} className="d-flex border rounded p-2">
         <span className="me-auto">{attemptDate ? new Date(attemptDate).toLocaleDateString() : '-'}</span>
         <small className="ms-auto text-muted">{clue ? clueText(clue) : '-'}</small>
