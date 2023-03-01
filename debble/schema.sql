@@ -1,0 +1,26 @@
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS post;
+
+CREATE TABLE user (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL
+);
+
+CREATE TABLE media (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  location TEXT NOT NULL,
+  media_type INTEGER NOT NULL,
+  solution_date DATE NOT NULL,
+  puzzle_date DATE
+);
+
+CREATE TABLE attempt (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  media_id INTEGER NOT NULL,
+  attempt_date DATE NOT NULL,
+  attempt_number INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user (id),
+  FOREIGN KEY (media_id) REFERENCES media (id)
+);
