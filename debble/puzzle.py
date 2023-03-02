@@ -46,7 +46,7 @@ def media(puzzle_date):
 
         # 1. query all rows without puzzle_date
         medias = db.execute(
-            "SELECT * FROM media WHERE puzzle_date = ''"
+            "SELECT * FROM media WHERE puzzle_date = '' OR puzzle_date IS NULL"
         )
 
         # 2. select an id at random among those

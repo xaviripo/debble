@@ -13,10 +13,10 @@ export const Media = ({ date }) => {
 
   switch(type) {
     case 'image/jpeg':
-      mediaElement = <img style={{maxHeight: '300px'}} src={`media/${date}`}/>;
+      mediaElement = <img style={{maxHeight: '400px'}} src={`media/${date}`}/>;
       break;
     case 'video/mp4':
-      mediaElement = <video style={{maxHeight: '300px'}} controls>
+      mediaElement = <video style={{maxHeight: '400px'}} controls>
         <source src={`media/${date}`}/>
         Your browser does not support the video element.
       </video>;
