@@ -1,3 +1,20 @@
+# Setting up the machine
+
+First, install NVM and Python 3.
+
+```
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+flask --app debble init-db # Create the database
+```
+
+Depoy using:
+
+```
+./run.sh
+```
+
 # Compile the frontend
 
 ```sh
