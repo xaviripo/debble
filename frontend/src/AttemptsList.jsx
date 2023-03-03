@@ -78,6 +78,7 @@ export const AttemptsList = ({ date, updater, setDisabled }) => {
 
   let [attempts, setAttempts] = useState([]);
   let [solution, setSolution] = useState(null);
+  let [solutionColor, setSolutionColor] = useState('text-success');
   let [showShare, setShowShare] = useState(false);
 
   useEffect(() => { (async () => {
@@ -92,12 +93,15 @@ export const AttemptsList = ({ date, updater, setDisabled }) => {
       setDisabled(true);
       // Show share the button
       setShowShare(true);
+      const response = await fetch(`solution/${date}`);
+      setSolution(await response.text());
     }
 
     // Player didn't get the solution correctly
     if (data.length >= MAX_ATTEMPTS && data.every(({ clue }) => clue !== "")) {
       const response = await fetch(`solution/${date}`);
       setSolution(await response.text());
+      setSolutionColor('text-danger');
     }
 
   })(); }, [updater]);
@@ -113,32 +117,41 @@ export const AttemptsList = ({ date, updater, setDisabled }) => {
     } catch {}
   });
 
-  let shareButton = (result) => <button
-    id="shareButton"
-    className="mx-auto btn btn-primary shadow-none"
-    ref={tooltipRef}
-    onClick={() => navigator.clipboard.writeText(`Debble ${new Date(date).toLocaleDateString()}}
-🇩${Object.assign(new Array(MAX_ATTEMPTS).fill('▫️'), [...result]).join('')}
+  let shareButton = (result) => {
 
-https://debble.app`)}>Share</button>;
+    const emojis = Object.assign(new Array(MAX_ATTEMPTS).fill('▫️'), [...result]).join('');
+    const shareable = `Debble ${new Date(date).toLocaleDateString()}
+🐝${emojis}
 
-  let solutionOutput = <span className="text-danger">Solution: {solution}</span>;
+https://debble.app`;
+
+    return <>
+      <p>{emojis}</p>
+      <button
+        id="shareButton"
+        className="btn btn-primary shadow-none mb-3"
+        ref={tooltipRef}
+        onClick={() => navigator.clipboard.writeText(shareable)}>Share</button>
+    </>;
+  };
+
+  let solutionOutput = <span className={solutionColor}>Solution: {solution}</span>;
 
   let result = '';
 
-  return <>
+  return <div className="text-center">
     <div className="my-3">
       {attempts.map(({ attemptDate, clue }, attemptNumber) => {
         let {text, color, emoji} = clueTextColor(clue);
         let lightText = ['black', 'brown'].includes(color);
         result += emoji;
         return <div key={attemptNumber} className={`d-flex border rounded p-2 m-1 ${lightText ? 'text-light' : ''}`} style={{backgroundColor: color}}>
-          <span className="me-auto">{attemptDate ? new Date(attemptDate).toLocaleDateString() : '-'}</span>
+          <span className="me-auto">{attemptDate ? new Date(attemptDate).toLocaleDateString() : '\u00A0'}</span>
           <small className={`ms-auto text-muted${lightText ? '-light' : ''}`}>{text}</small>
         </div>;
       })}
     </div>
-    {showShare ? shareButton(result) : null}
     {solution ? solutionOutput : ''}
-  </>;
+    {showShare ? shareButton(result) : null}
+  </div>;
 }

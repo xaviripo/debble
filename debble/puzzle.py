@@ -83,7 +83,8 @@ def solution(puzzle_date):
         'SELECT * FROM attempt INNER JOIN media ON attempt.media_id = media.id WHERE media.puzzle_date = ? ORDER BY attempt.attempt_number', (puzzle_date,)
     )
 
-    if sum(1 for _ in attempts) < MAX_ATTEMPTS:
+    attempts = list(attempts)
+    if sum(1 for _ in attempts) < MAX_ATTEMPTS and all((attempt['attempt_date'].isoformat()[:10] != media['solution_date'].isoformat()[:10]) for attempt in attempts):
         abort(403)
 
     return media['solution_date'].isoformat()[:10], 200
