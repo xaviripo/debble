@@ -39,6 +39,7 @@ if __name__ == '__main__':
 
         # Ignore this file
         if r is None:
+            print("Couldn't load file: " + entry)
             return None
 
         return (

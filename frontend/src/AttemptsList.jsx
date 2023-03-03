@@ -1,12 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 // Hey! This constant is also present in the backend.
 const MAX_ATTEMPTS = 6;
 
-const clueText = clue => {
+const clueTextColor = clue => {
 
-  if (clue.length === 0) {
-    return 'you got it!'
+  if (clue === null) {
+    return {
+      text: '',
+      color: '',
+      emoji: '',
+    };
+  }
+
+  if (clue === '') {
+    return {
+      text: 'correct!',
+      color: 'green',
+      emoji: '🟩',
+    };
   }
 
   const period = clue[0];
@@ -14,18 +26,36 @@ const clueText = clue => {
 
   switch(period) {
     case 'x':
-      return older ? 'more than a year before' : 'more than a year after';
+      return {
+        text: older ? 'more than a year before' : 'more than a year after',
+        color: 'black',
+        emoji: '⬛',
+      };
     case 'y':
-      return older ? 'less than a year before' : 'less than a year after';
+      return {
+        text: older ? 'less than a year before' : 'less than a year after',
+        color: 'brown',
+        emoji: '🟫',
+      };
     case 's':
-      return older ? 'less than six months before' : 'less than six months after';
+      return {
+        text: older ? 'less than six months before' : 'less than six months after',
+        color: 'red',
+        emoji: '🟥',
+      };
     case 'm':
-      return older ? 'less than a month before' : 'less than a month after';
+      return {
+        text: older ? 'less than a month before' : 'less than a month after',
+        color: 'orange',
+        emoji: '🟧',
+      };
     case 'w':
-      return older ? 'less than a week before' : 'less than a week after';
+      return {
+        text: older ? 'less than a week before' : 'less than a week after',
+        color: 'yellow',
+        emoji: '🟨',
+      };
   }
-
-  return '';
 
 };
 
@@ -56,13 +86,12 @@ export const AttemptsList = ({ date, updater, setDisabled }) => {
 
     setAttempts(fill(data));
 
-    // If max number of attempts reached OR some attempt is successful, disable the form
+    // If max number of attempts reached OR some attempt is successful, game ends
     if (data.length >= MAX_ATTEMPTS || data.some(({ clue }) => clue === "")) {
+      // Disable the form
       setDisabled(true);
-
-      // Show share button
+      // Show share the button
       setShowShare(true);
-
     }
 
     // Player didn't get the solution correctly
@@ -73,20 +102,43 @@ export const AttemptsList = ({ date, updater, setDisabled }) => {
 
   })(); }, [updater]);
 
-  let solutionOutput = solution ? <span className="text-danger">Solution: {solution}</span> : '';
+  const tooltipRef = useRef();
+  useEffect(() => {
+    try {
+      new bootstrap.Tooltip(tooltipRef.current, {
+        title: "Copied to clipboard!",
+        placement: 'top',
+        trigger: 'click',
+      });
+    } catch {}
+  });
 
-  let shareButton = <button className="mx-auto btn btn-primary shadow-none">Share</button>;
+  let shareButton = (result) => <button
+    id="shareButton"
+    className="mx-auto btn btn-primary shadow-none"
+    ref={tooltipRef}
+    onClick={() => navigator.clipboard.writeText(`Debble ${new Date(date).toLocaleDateString()}}
+🇩${Object.assign(new Array(MAX_ATTEMPTS).fill('▫️'), [...result]).join('')}
+
+https://debble.app`)}>Share</button>;
+
+  let solutionOutput = <span className="text-danger">Solution: {solution}</span>;
+
+  let result = '';
 
   return <>
     <div className="my-3">
-      {attempts.map(({ attemptDate, clue }, attemptNumber) => <div key={attemptNumber} className="d-flex border rounded p-2 m-1">
-        <span className="me-auto">{attemptDate ? new Date(attemptDate).toLocaleDateString() : '-'}</span>
-        <small className="ms-auto text-muted">{clue ? clueText(clue) : '-'}</small>
-      </div>)}
+      {attempts.map(({ attemptDate, clue }, attemptNumber) => {
+        let {text, color, emoji} = clueTextColor(clue);
+        let lightText = ['black', 'brown'].includes(color);
+        result += emoji;
+        return <div key={attemptNumber} className={`d-flex border rounded p-2 m-1 ${lightText ? 'text-light' : ''}`} style={{backgroundColor: color}}>
+          <span className="me-auto">{attemptDate ? new Date(attemptDate).toLocaleDateString() : '-'}</span>
+          <small className={`ms-auto text-muted${lightText ? '-light' : ''}`}>{text}</small>
+        </div>;
+      })}
     </div>
-    <div className="flex">
-      {showShare ? shareButton : null}
-    </div>
-    {solutionOutput}
+    {showShare ? shareButton(result) : null}
+    {solution ? solutionOutput : ''}
   </>;
 }
