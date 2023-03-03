@@ -44,8 +44,8 @@ export const AttemptForm = ({ date, forceAttemptsListUpdate, disabled }) => {
   };
 
   return <form className="form-inline d-flex justify-content-center" onSubmit={onSubmitHandler}>
-    <input className="form-control" type="date" value={attemptDate} onChange={e => setAttemptDate(e.target.value)} disabled={disabled}/>
-    <button className="btn btn-secondary" type="submit" disabled={disabled}>Submit</button>
+    <input className="form-control shadow-none" type="date" value={attemptDate} onChange={e => setAttemptDate(e.target.value)} disabled={disabled}/>
+    <button className="btn btn-secondary shadow-none" type="submit" disabled={disabled}>Submit</button>
   </form>;
 
 }

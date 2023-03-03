@@ -48,6 +48,7 @@ export const AttemptsList = ({ date, updater, setDisabled }) => {
 
   let [attempts, setAttempts] = useState([]);
   let [solution, setSolution] = useState(null);
+  let [showShare, setShowShare] = useState(false);
 
   useEffect(() => { (async () => {
     const response = await fetch(`attempts/${date}`);
@@ -58,6 +59,10 @@ export const AttemptsList = ({ date, updater, setDisabled }) => {
     // If max number of attempts reached OR some attempt is successful, disable the form
     if (data.length >= MAX_ATTEMPTS || data.some(({ clue }) => clue === "")) {
       setDisabled(true);
+
+      // Show share button
+      setShowShare(true);
+
     }
 
     // Player didn't get the solution correctly
@@ -70,13 +75,18 @@ export const AttemptsList = ({ date, updater, setDisabled }) => {
 
   let solutionOutput = solution ? <span className="text-danger">Solution: {solution}</span> : '';
 
+  let shareButton = <button className="mx-auto btn btn-primary shadow-none">Share</button>;
+
   return <>
-    <ol style={{listStyleType: 'none'}}>
-      {attempts.map(({ attemptDate, clue }, attemptNumber) => <li key={attemptNumber} className="d-flex border rounded p-2">
+    <div className="my-3">
+      {attempts.map(({ attemptDate, clue }, attemptNumber) => <div key={attemptNumber} className="d-flex border rounded p-2 m-1">
         <span className="me-auto">{attemptDate ? new Date(attemptDate).toLocaleDateString() : '-'}</span>
         <small className="ms-auto text-muted">{clue ? clueText(clue) : '-'}</small>
-      </li>)}
-    </ol>
+      </div>)}
+    </div>
+    <div className="flex">
+      {showShare ? shareButton : null}
+    </div>
     {solutionOutput}
   </>;
 }

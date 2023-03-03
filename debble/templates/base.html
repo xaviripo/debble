@@ -4,21 +4,63 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{% endblock %} - Debble</title>
-  <link rel="icon" href="data:,">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icons/favicon-32x32.png') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icons/favicon-16x16.png') }}">
+  <link rel="mask-icon" href="{{ url_for('static', filename='icons/safari-pinned-tab.svg') }}" color="#7bb677">
+  <meta name="theme-color" content="#7bb677">
+
 </head>
 <body>
-  
+
+  {% if g.user %}
+    <!-- Modal -->
+    <div class="modal fade" id="instructionsModal" tabindex="-1" aria-labelledby="instructionsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="instructionsModalLabel">Instructions</h1>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-3">
+              <h2 class="col-2 text-center"><i class="bi bi-envelope-paper-heart"></i></h2>
+              <div class="col-10">Every day a new picture, video, or audio from the WhatsApp convo between Debbie and Xavi will be shown</div>
+            </div>
+            <div class="row mb-3">
+              <h2 class="col-2 text-center"><i class="bi bi-calendar2-heart"></i></h2>
+              <div class="col-10">Your mission is to guess on which date it was sent in six attempts or fewer!</div>
+            </div>
+            <div class="row mb-3">
+              <h2 class="col-2 text-center"><i class="bi bi-search-heart"></i></h2>
+              <div class="col-10">After every attempt you will get a small clue...</div>
+            </div>
+            <div class="text-center">Best of luck!</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary shadow-none" data-bs-dismiss="modal">Let's play!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Navbar -->
   <nav class="navbar navbar-expand navbar-dark bg-dark">
     <div class="container-fluid">
       <!-- Add ghost ul with z-index very low to pad logo to the center -->
       <ul class="navbar-nav me-auto" style="z-index: -10000;">
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="bi bi-question-circle-fill"></i>
-          </a>
-        </li>
+        {% if g.user %}
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="bi bi-question-circle-fill"></i>
+            </a>
+          </li>
+        {% endif %}
         <li class="nav-item">
           {% if g.user %}
             <a class="nav-link" href="{{ url_for('auth.logout') }}">
@@ -32,13 +74,15 @@
           {% endif %}
         </li>
       </ul>
-      <a class="navbar-brand mx-auto" href="#">Debble</a>
+      <a class="navbar-brand mx-auto" href="/">Debble</a>
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="bi bi-question-circle-fill"></i>
-          </a>
-        </li>
+        {% if g.user %}
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#instructionsModal">
+              <i class="bi bi-question-circle-fill"></i>
+            </a>
+          </li>
+        {% endif %}
         <li class="nav-item">
           {% if g.user %}
             <a class="nav-link" href="{{ url_for('auth.logout') }}">
@@ -55,10 +99,11 @@
     </div>
   </nav>
 
-  <section class="content">
+  <!-- Content -->
+  <section class="content container">
     <div id="liveAlertPlaceholder"></div>
     {% for message in get_flashed_messages() %}
-      <div class="flash alert alert-danger">{{ message }}</div>
+      <div class="flash alert alert-danger mt-3">{{ message }}</div>
     {% endfor %}
     <div class="justify-content-center mt-3 row">
       <div class="col-10 col-md-4 border rounded bg-light p-3">
@@ -66,6 +111,9 @@
       </div>
     </div>
   </section>
+
+  <!-- Bootstrap stuff -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
 </body>
 </html>
