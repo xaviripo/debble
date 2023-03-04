@@ -68,7 +68,6 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.logout') }}">
               <i class="bi bi-person-x-fill"></i>
-              <span style="margin-left: 0.5em;">{{ g.user['username'] }}</span>
             </a>
           </li>
         {% else %}
@@ -95,7 +94,6 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.logout') }}">
               <i class="bi bi-person-x-fill"></i>
-              <span style="margin-left: 0.5em;">{{ g.user['username'] }}</span>
             </a>
           </li>
         {% else %}
