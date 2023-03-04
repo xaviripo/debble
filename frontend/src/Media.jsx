@@ -22,6 +22,7 @@ export const Media = ({ date }) => {
       </video>;
       break;
     case 'audio/mp4a-latm':
+    case 'audio/mpeg':
       mediaElement = <audio controls>
         <source src={`media/${date}`}/>
         Your browser does not support the audio element.
