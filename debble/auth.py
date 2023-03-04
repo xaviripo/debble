@@ -59,6 +59,22 @@ def login():
 
     return render_template('login.html')
 
+@bp.route('/change-password', methods=('GET', 'POST'))
+@login_required
+def change_password():
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+        db = get_db()
+        error = None
+        user = db.execute(
+            'UPDATE user SET password = ? WHERE username = ?', (generate_password_hash(new_password), g.user['username'],)
+        )
+        db.commit()
+
+        return redirect(url_for('puzzle.index'))
+
+    return render_template('change_password.html')
+
 @bp.route('/logout')
 def logout():
     session.clear()

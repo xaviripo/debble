@@ -60,19 +60,23 @@
               <i class="bi bi-question-circle-fill"></i>
             </a>
           </li>
-        {% endif %}
-        <li class="nav-item">
-          {% if g.user %}
+          <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.logout') }}">
               <i class="bi bi-person-x-fill"></i>
               <span class="ml-3">{{ g.user['username'] }}</span>
             </a>
-          {% else %}
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.change_password') }}">
+              <i class="bi bi-key"></i>
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.login') }}">
               <i class="bi bi-person-fill"></i>
             </a>
-          {% endif %}
-        </li>
+          </li>
+        {% endif %}
       </ul>
       <a class="navbar-brand mx-auto" href="/">Debble</a>
       <ul class="navbar-nav ms-auto">
@@ -82,19 +86,24 @@
               <i class="bi bi-question-circle-fill"></i>
             </a>
           </li>
-        {% endif %}
-        <li class="nav-item">
-          {% if g.user %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.change_password') }}">
+              <i class="bi bi-key"></i>
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.logout') }}">
               <i class="bi bi-person-x-fill"></i>
               <span style="margin-left: 0.5em;">{{ g.user['username'] }}</span>
             </a>
-          {% else %}
+          </li>
+        {% else %}
+          <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.login') }}">
               <i class="bi bi-person-fill"></i>
             </a>
-          {% endif %}
-        </li>
+          </li>
+        {% endif %}
       </ul>
     </div>
   </nav>

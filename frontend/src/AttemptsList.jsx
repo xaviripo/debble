@@ -82,8 +82,14 @@ export const AttemptsList = ({ date, updater, setDisabled }) => {
   let [showShare, setShowShare] = useState(false);
 
   useEffect(() => { (async () => {
-    const response = await fetch(`attempts/${date}`);
-    const data = await response.json();
+    let data;
+    try {
+      const response = await fetch(`attempts/${date}`);
+      data = await response.json();
+    } catch {
+      // Response might be malformed if media has not yet been selected for this date
+      data = [];
+    }
 
     setAttempts(fill(data));
 
