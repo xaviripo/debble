@@ -56,21 +56,22 @@
       <ul class="navbar-nav me-auto" style="z-index: -10000;">
         {% if g.user %}
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#instructionsModal">
               <i class="bi bi-question-circle-fill"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.change_password') }}">
+              <i class="bi bi-key-fill"></i>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.logout') }}">
               <i class="bi bi-person-x-fill"></i>
-              <span class="ml-3">{{ g.user['username'] }}</span>
-            </a>
-        {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.change_password') }}">
-              <i class="bi bi-key"></i>
+              <span style="margin-left: 0.5em;">{{ g.user['username'] }}</span>
             </a>
           </li>
+        {% else %}
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.login') }}">
               <i class="bi bi-person-fill"></i>
@@ -88,7 +89,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('auth.change_password') }}">
-              <i class="bi bi-key"></i>
+              <i class="bi bi-key-fill"></i>
             </a>
           </li>
           <li class="nav-item">
