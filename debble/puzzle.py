@@ -80,7 +80,7 @@ def solution(puzzle_date):
     ).fetchone()
 
     attempts = db.execute(
-        'SELECT * FROM attempt INNER JOIN media ON attempt.media_id = media.id WHERE media.puzzle_date = ? ORDER BY attempt.attempt_number', (puzzle_date,)
+        'SELECT * FROM attempt INNER JOIN media ON attempt.media_id = media.id WHERE media.puzzle_date = ? AND attempt.user_id = ? ORDER BY attempt.attempt_number', (puzzle_date, session['user_id'],)
     )
 
     attempts = list(attempts)
@@ -96,7 +96,7 @@ def attempts(puzzle_date):
 
     db = get_db()
     attempts = db.execute(
-        'SELECT * FROM attempt INNER JOIN media ON attempt.media_id = media.id WHERE media.puzzle_date = ? ORDER BY attempt.attempt_number', (puzzle_date,)
+        'SELECT * FROM attempt INNER JOIN media ON attempt.media_id = media.id WHERE media.puzzle_date = ? AND attempt.user_id = ? ORDER BY attempt.attempt_number', (puzzle_date, session['user_id'])
     )
 
     # Inserting a new attempt
