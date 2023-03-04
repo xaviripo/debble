@@ -74,7 +74,7 @@ const fill = (attempts) => {
   return result;
 }
 
-export const AttemptsList = ({ date, updater, setDisabled }) => {
+export const AttemptsList = ({ date, updater, setDisabled, setAttemptDate }) => {
 
   let [attempts, setAttempts] = useState([]);
   let [solution, setSolution] = useState(null);
@@ -89,6 +89,11 @@ export const AttemptsList = ({ date, updater, setDisabled }) => {
     } catch {
       // Response might be malformed if media has not yet been selected for this date
       data = [];
+    }
+
+    // Use last attempt date as default date for the date picker
+    if (data.length >= 1) {
+      setAttemptDate(data[data.length - 1].attemptDate);
     }
 
     setAttempts(fill(data));
@@ -149,7 +154,7 @@ https://debble.app`;
     <div className="my-3">
       {attempts.map(({ attemptDate, clue }, attemptNumber) => {
         let {text, color, emoji} = clueTextColor(clue);
-        let lightText = ['black', 'brown'].includes(color);
+        let lightText = ['black', 'SaddleBrown', 'FireBrick'].includes(color);
         result += emoji;
         return <div key={attemptNumber} className={`d-flex border rounded p-2 m-1 ${lightText ? 'text-light' : ''}`} style={{backgroundColor: color}}>
           <span className="me-auto">{attemptDate ? new Date(attemptDate).toLocaleDateString() : '\u00A0'}</span>

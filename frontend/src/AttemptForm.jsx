@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
-export const AttemptForm = ({ date, forceAttemptsListUpdate, disabled }) => {
-
-  let [attemptDate, setAttemptDate] = useState('');
+export const AttemptForm = ({ date, attemptDate, setAttemptDate, forceAttemptsListUpdate, disabled }) => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
