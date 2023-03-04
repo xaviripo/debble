@@ -1,7 +1,7 @@
 import functools
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -57,6 +57,9 @@ def login():
 
         flash(error)
 
+    if g.user is not None:
+        return redirect(url_for('puzzle.index'))
+
     return render_template('login.html')
 
 @bp.route('/change-password', methods=('GET', 'POST'))
@@ -80,13 +83,11 @@ def logout():
     session.clear()
     return redirect(url_for('puzzle.index'))
 
-# This route is disabled as we don't want new users freely registering;
-# But it can be enabled at any time if desired.
+# Login required so that random users cannot create accounts.
+# But this service shouldn't be used regularly anyways in the first place.
 @bp.route('/register', methods=('GET', 'POST'))
+@login_required
 def register():
-
-    # ROUTE DISABLED
-    abort(404)
 
     if request.method == 'POST':
         username = request.form['username']
@@ -114,4 +115,4 @@ def register():
         flash(error)
 
     # I copied and pasted this, template doesn't exist cause I don't need it
-    return render_template('auth/register.html')
+    return render_template('register.html')
