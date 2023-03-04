@@ -34,13 +34,13 @@ const clueTextColor = clue => {
     case 'y':
       return {
         text: older ? 'less than a year before' : 'less than a year after',
-        color: 'brown',
+        color: 'SaddleBrown',
         emoji: '🟫',
       };
     case 's':
       return {
         text: older ? 'less than six months before' : 'less than six months after',
-        color: 'red',
+        color: 'FireBrick',
         emoji: '🟥',
       };
     case 'm':
