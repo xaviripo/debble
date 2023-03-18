@@ -11,23 +11,18 @@ export const Media = ({ date }) => {
 
   let mediaElement = null;
 
-  switch(type) {
-    case 'image/jpeg':
-      mediaElement = <img style={{maxHeight: '400px'}} src={`media/${date}`}/>;
-      break;
-    case 'video/mp4':
-      mediaElement = <video style={{maxHeight: '400px'}} controls>
+  if (type.match(/image\/.*/g)) {
+    mediaElement = <img style={{maxHeight: '400px'}} src={`media/${date}`}/>;
+  } else if (type.match(/video\/.*/g)) {
+    mediaElement = <video style={{maxHeight: '400px'}} controls>
         <source src={`media/${date}`}/>
         Your browser does not support the video element.
       </video>;
-      break;
-    case 'audio/mp4a-latm':
-    case 'audio/mpeg':
-      mediaElement = <audio controls>
-        <source src={`media/${date}`}/>
-        Your browser does not support the audio element.
-      </audio>;
-      break;
+  } else if (type.match(/audio\/.*/g)) {
+    mediaElement = <audio controls>
+      <source src={`media/${date}`}/>
+      Your browser does not support the audio element.
+    </audio>;
   }
 
   return <div className="d-flex justify-content-center mb-3">
