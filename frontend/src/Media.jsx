@@ -12,9 +12,9 @@ export const Media = ({ date }) => {
   let mediaElement = null;
 
   if (type.match(/image\/.*/g)) {
-    mediaElement = <img style={{maxHeight: '400px'}} src={`media/${date}`}/>;
+    mediaElement = <img style={{maxHeight: '100%', maxWidth: '100%'}} src={`media/${date}`}/>;
   } else if (type.match(/video\/.*/g)) {
-    mediaElement = <video style={{maxHeight: '400px'}} controls>
+    mediaElement = <video style={{maxHeight: '100%', maxWidth: '100%'}} controls>
         <source src={`media/${date}`}/>
         Your browser does not support the video element.
       </video>;
